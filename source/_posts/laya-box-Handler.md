@@ -4,9 +4,9 @@ date: 2018-03-09 11:30:09
 categories:
 - web前端
 tags:
-- layabox
-- actionscript
-- javascript
+- LayaBox
+- ActionScript
+- JavaScript
 
 ---
 (本文是as和js混合，其实两者差不多，一个妈生的。^_^!!)

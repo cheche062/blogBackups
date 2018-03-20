@@ -2,7 +2,7 @@
 title: TVXQ
 data: 2018-02-28 11:21:43
 categories:
-- 音乐类
+- 音乐
 tags:
 - 艺人
 - 舞蹈
