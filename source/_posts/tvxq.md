@@ -13,7 +13,8 @@ photoInfos:
 	caption: 2005
 ---
 
-![2005](/images/five.jpg)
+<img src="/images/five.jpg" width="50%" height="50%">
+
 
 * uknow
 * max

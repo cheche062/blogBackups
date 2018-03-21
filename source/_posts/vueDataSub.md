@@ -11,7 +11,8 @@ tags:
 
 #### 关于vue数据绑定的极简原理
 
-![vue logo](https://user-gold-cdn.xitu.io/2017/8/2/c00a07c463dd341d5c0e731a9ebdca52?imageView2/1/w/800/h/600/q/85/format/webp/interlace/1)
+<img src="https://user-gold-cdn.xitu.io/2017/8/2/c00a07c463dd341d5c0e731a9ebdca52?imageView2/1/w/800/h/600/q/85/format/webp/interlace/1" width="150px" height="150px" alt="vue logo" title="vue logo">
+
 
 <!-- more -->
 ***dep.js***
