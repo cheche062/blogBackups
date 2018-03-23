@@ -177,6 +177,9 @@ p.then((val) => console.log('1then: success', val))
 ```
 
 Promise 对象的错误具有“冒泡”性质，会一直向后传递，直到被捕获为止。也就是说，错误总是会被下一个catch语句捕获。
+上段代码首先`p`这个Promise对象（状态是resolved）遇到第一个`then`会忽略掉它定义的成功回调，注意此时调用完第一个`then`方法后的返回值是**全新的Promise对象**！且状态同样是`resolved`，为何会这样？因为它把`p`的状态进行了一层包装也就作为了自己的状态，且值也和它一样！所以说`Promise`的状态具有传递性。
+
+因为这个错误目前并没有被捕获处理，所以继续向后传递。同样遇到第二个`then`时我们可以当做跳过它，但发生的细节和第一个`then`同理,直到`3catch`将这个错误捕获，所以输出`3catch: error 失败`。上面也提到`catch`也就是`then`的一个别名而已，本质其实差不多。故此时`catch`调用后的返回值再次是一个全新的promise对象，那状态呢？因为这边给`catch`传递的参数并没有定义返回值，所以默认就是一个同步值`undefined`，则`catch`返回的promise对象的状态就是`resolved`。那么它调用最后一个`then`输出`5then: success undefined`，也就不难理解了。
 
 
 ### 5.Promise之resolve、reject静态方法
@@ -259,7 +262,7 @@ Promise.all([p1, p2])
 // all success [ [ 'p1 inner success', 'p2 inner success' ] ]
 
 ```
-all、race方法接受数组作为参数，且数组每个成员都为Promise对象。如果不是的话就调用Promise.resolve方法，将其转为 Promise 实例，再进一步处理。使用表示要包装的多个promise异步操作来确定。具体可以看代码理解！
+all、race方法接受数组作为参数，且数组每个成员都为Promise对象。如果不是的话就调用Promise.resolve方法，将其转为 Promise 实例，再进一步处理。使用表示要包装的多个promise异步操作来确定。具体可以看代码理解，要多动手自己试验！
 
 
 ##### 参考文献：
