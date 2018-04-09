@@ -14,7 +14,6 @@ tags:
 
 解决异步编程我们已经有了es6的Promise，但Rx是更好的方案。
 
-<!-- more -->
 
 
 优势：
@@ -26,7 +25,7 @@ tags:
 
 ### 内容：
 
-##### observable（可被观察对象）、producer (生产者)、observer（观察者）、operator（操作符）、subscription()
+##### observable（可被观察对象）、producer (生产者)、observer（观察者）、operator（操作符）、subscription(可退订者)
 
 ```js
 import { Observable } from 'rxjs/Rx';
@@ -127,6 +126,8 @@ let app$ = input$
                 }
             })
         })
+        // outerVal就是输入框的内容值，
+        // innerVal就是请求后的结果数据
     }, (outerVal, innerVal) => {
         return innerVal.filter(item => item.includes(outerVal))
     })
@@ -145,8 +146,11 @@ let app$ = input$
 
 // 背景颜色切换
 function toggleBgColor($dom) {
+    // 创建鼠标移入数据流
     let mouseover$ = Observable.fromEvent($dom, 'mouseover')
+    // 创建鼠标移出数据流
     let mouseout$ = Observable.fromEvent($dom, 'mouseout')
+    // 创建鼠标点击数据流
     let click$ = Observable.fromEvent($dom, 'click')
     click$ = click$.do((e) => {
         $(e.target).remove()
@@ -158,6 +162,7 @@ function toggleBgColor($dom) {
         $(e.target).css('backgroundColor', 'white')
     })
 
+    // 合并数据流转为其它数据
     return mouseover$.merge(mouseout$, click$)
         .map($dom => $dom.target.innerHTML)
 }
@@ -165,3 +170,38 @@ function toggleBgColor($dom) {
 app$.subscribe(console.log);
 ```
 
+<!-- more -->
+
+##### 调试：
+其中使用了用于Rx的调试工具，需要安装两个东西
+1. npm install rx-devtools --save-dev
+2. 谷歌的扩展插件[RxJS developer tools](https://chrome.google.com/webstore/detail/rxjs-developer-tools/dedeglckjaldaochjmnochcfamanokie)
+
+使用方式如上述代码所示，使用需要注意几个要点
+* 在顶部引入并执行`setupRxDevtools`方法
+* `.debug('查询')`方法在需要调试的流中插入即可，`查询`名字可随意取
+* 在页面刷新前需要打开`Rx Devtools`页签，如图：
+
+![rx1](/images/debug/rx1.png)
+* 选中"查询"当有数据流产生时会同时映射到右图，点击相应的操作符上面的玻璃球，就能看到流进该操作的实时数据便于调试。
+
+![rx2](/images/debug/rx2.png)
+
+##### 分析：
+* 这种编程体验很优雅，通过一个个操作符将应用需求组装起来，易扩展和维护，代码看起来很简洁干净。
+* 操作符永远不破坏原始数据流仅仅返回新的数据流，所以仍然可以监听之前的数据流，如：`input$`和`app$`，map的操作并妨碍影响对`input$`的数据监听。
+
+```js
+let input = document.getElementById('input')
+let input$ = Observable.fromEvent(input, 'input')
+let app$ = input$.map(e => e.target.value)
+
+input$.subscribe(val => console.log('A', val))
+app$.subscribe(val => console.log('B', val))
+```
+
+
+### 相关文档：
+
+[RxJS 5 基本原理](https://rxjs-cn.github.io/rxjs5-ultimate-cn/)
+[RxJs中文文档](http://cn.rx.js.org/)
